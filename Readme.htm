@@ -1,0 +1,712 @@
+<h1 id="-hatraba-version-1-0-0">*~HaTraBa~* Version 1.0.0</h1>
+<p>A basic CLI-based <strong>Ha</strong>bit <strong>Tra</strong>cking <strong>Ba</strong>ckend.</p>
+<p>(Developed in the course of a portfolio task for my study at IUBH).</p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
+<li><a href="#hatraba-in-a-nutshell">HaTraBa in a nutshell</a></li>
+<li><a href="#supported-basic-functionality-scenarios">Supported basic functionality scenarios</a></li>
+<li><a href="#setup-guide">Setup Guide</a><ul>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#installation">Installation</a></li>
+</ul>
+</li>
+<li><a href="#run-test-cases">Run test cases</a></li>
+<li><a href="#usage-guide">Usage Guide</a><ul>
+<li><a href="#overview-of-commands">Overview of Commands</a></li>
+<li><a href="#management-of-habits">Management of Habits</a><ul>
+<li><a href="#create">create</a></li>
+<li><a href="#checkoff">checkoff</a></li>
+<li><a href="#delete">delete</a></li>
+</ul>
+</li>
+<li><a href="#analytics-of-habits">Analytics of Habits</a><ul>
+<li><a href="#list-habits">list-habits</a></li>
+<li><a href="#list-habits-by-periodicity">list-habits-by-periodicity</a></li>
+<li><a href="#get-longest-streak">get-longest-streak</a></li>
+<li><a href="#get-longest-streak-for-habit">get-longest-streak-for-habit</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#behind-the-scenes">Behind the scenes</a><ul>
+<li><a href="#components">Components</a></li>
+<li><a href="#process-create-habit">Process Create Habit</a></li>
+<li><a href="#process-checkoff-habit">Process Checkoff Habit</a></li>
+<li><a href="#process-delete-habit">Process Delete Habit</a></li>
+<li><a href="#process-list-habits">Process List Habits</a></li>
+<li><a href="#process-list-habits-by-periodicity">Process List Habits by periodicity</a></li>
+<li><a href="#process-get-longest-streak">Process Get longest Streak</a></li>
+<li><a href="#process-get-longest-streak-for-habit">Process Get longest Streak for Habit</a></li>
+</ul>
+</li>
+<li><a href="#license">License</a></li>
+</ul>
+<h2 id="hatraba-in-a-nutshell">HaTraBa in a nutshell</h2>
+<ul>
+<li>Habit tracking backend that enables human users as well as system users (e.g. technical clients with an user interface to a human user) to manage and analyze habits.</li>
+<li>Command line interface application where users interact entirely through their terminal.</li>
+<li>Accepts a set of commands and returns JSON output per default which can be further processed by the user. In addition and if desired, a more human readable output format can be forced. </li>
+<li>“Ready-to-use” with 5 predefined habits and example tracking data for period of one month.</li>
+</ul>
+<h2 id="supported-basic-functionality-scenarios">Supported basic functionality scenarios</h2>
+<p><img src="docs/Diagram-hatraba-Use-Cases.png" alt="Use Case Diagram"></p>
+<h2 id="setup-guide">Setup Guide</h2>
+<h3 id="prerequisites">Prerequisites</h3>
+<p>Python 3.8.3 or later</p>
+<h3 id="installation">Installation</h3>
+<p>Note: Installation routine under Windows 10 is described here.
+Please adapt shell commands in case of you&#39;re running another operating system.</p>
+<p>(1) Download the development version (current master is V1.0.0) to any wished location</p>
+<p><a href="https://github.com/anjakuchenbecker/oofpp_habits_project/archive/main.zip">https://github.com/anjakuchenbecker/oofpp_habits_project/archive/main.zip</a></p>
+<p>(2) Open the <code>cmd</code> and go to the download location</p>
+<p>(3) Unzip the downloaded file</p>
+<pre><code class="lang-sh"><span class="hljs-variable">$ </span>tar -xf oofpp_habits_project-main.zip
+</code></pre>
+<p>(4) Switch to <code>oofpp_habits_project-main</code> folder</p>
+<pre><code class="lang-sh">$ <span class="hljs-built_in">cd</span> oofpp_habits_project-main
+</code></pre>
+<p>(5) Create virtual environment</p>
+<pre><code class="lang-sh">$ <span class="hljs-keyword">python</span> -m venv <span class="hljs-keyword">env</span>
+</code></pre>
+<p>(6) Activate virtual environment</p>
+<pre><code class="lang-sh">$ .<span class="hljs-symbol">\e</span>nv<span class="hljs-symbol">\S</span>cripts<span class="hljs-symbol">\a</span>ctivate
+</code></pre>
+<p>(7) Install requirements</p>
+<pre><code class="lang-sh">(env) $ pip <span class="hljs-keyword">install</span> -r requirements.txt
+</code></pre>
+<p>(8) Switch to <code>habittracker</code> folder</p>
+<pre><code class="lang-sh">(env) $ <span class="hljs-built_in">cd</span> habittracker
+</code></pre>
+<p>(9) Perform a tiny smoke test</p>
+<pre><code class="lang-sh">(<span class="hljs-keyword">env</span>) $ <span class="hljs-keyword">python</span> habit_tracker.py
+</code></pre>
+<p>You should see something like this</p>
+<p><img src="docs/Command_hatraba_output.png" alt="Command Output"></p>
+<p>Installation procedure is finished. </p>
+<p>Now, you can </p>
+<ul>
+<li><a href="#run-test-cases">Run the test cases</a>, to check whether everything is ok</li>
+<li>or directly start using HaTraBa, please refer to the <a href="#usage-guide">Usage Guide</a></li>
+</ul>
+<h2 id="run-test-cases">Run test cases</h2>
+<p>(1) Ensure that you are in the <code>habittracker</code> folder</p>
+<p>(2) Run tests</p>
+<pre><code class="lang-sh">(env) $ pytest ../tests
+</code></pre>
+<p>(3) You should now see something like this</p>
+<p><img src="docs/Command_hatraba_tc_output.png" alt="Command Output"></p>
+<h2 id="usage-guide">Usage Guide</h2>
+<p>Ensure that you are in the <code>habittracker</code> folder, before you running commands!</p>
+<p>The general usage pattern is:</p>
+<pre><code class="lang-sh">(env) $ python habit_tracker.py <span class="hljs-string">[OPTIONS]</span> COMMAND <span class="hljs-string">[ARGS]</span>
+</code></pre>
+<p>Use <code>python habit_tracker.py COMMAND --help</code> for information on a specific command.</p>
+<h3 id="overview-of-commands">Overview of commands</h3>
+<p>The following commands are supported:                   </p>
+ <table>
+  <tr>
+    <th>Command</th>
+    <th>Description</th>
+    <th>Category</th>
+  </tr>
+  <tr>
+    <td>create</td>
+    <td>Create habit with given details.</td>
+    <td>Management of habits</td>
+  </tr>
+  <tr>
+    <td>checkoff</td>
+    <td>Check off given habit.</td>
+    <td>Management of Habits</td>
+  </tr>
+  <tr>
+    <td>delete</td>
+    <td>Delete given habit.</td>
+    <td>Management of Habits</td>
+  </tr>
+  <tr>
+    <td>list-habits</td>
+    <td>Return a list of all currently tracked habits.</td>
+    <td>Analytics of Habits</td>
+  </tr>
+  <tr>
+    <td>list-habits-by-periodicity</td>
+    <td>Return a list of all currently tracked habits filtered according to given periodicity.</td>
+    <td>Analytics of Habits</td>
+  </tr>
+  <tr>
+    <td>get-longest-streak</td>
+    <td>Return the longest streak of all currently tracked habits.</td>
+    <td>Analytics of Habits</td>
+  </tr>
+  <tr>
+    <td>get-longest-streak-for-habit </td>
+    <td>Return the longest streak for the given habit.</td>
+    <td>Analytics of Habits</td>
+  </tr>
+</table>
+
+<p>Please refer to the subsequent chapters to get more details for each command.</p>
+<h3 id="management-of-habits">Management of Habits</h3>
+<h4 id="create">create</h4>
+<hr>
+<h5 id="description">Description</h5>
+<p>Creates a habit with given details and returns created habit. </p>
+<h5 id="options">Options</h5>
+ <table>
+  <tr>
+    <th>Option</th>
+    <th>Description</th>
+    <th>Required</th>
+  </tr>
+  <tr>
+    <td>-n, --name TEXT</td>
+    <td>Name of habit.</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>-d, --description TEXT</td>
+    <td>Description of habit.</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>-p, --periodicity [DAILY|WEEKLY]</td>
+    <td>Periodicity of habit.</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>-o, --output [JSON|HUMAN]</td>
+    <td>Output format. Default JSON.</td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>--help</td>
+    <td>Show this message and exit.</td>
+    <td>No</td>
+  </tr>
+</table>
+
+<h5 id="output">Output</h5>
+<p>JSON Document, per default. </p>
+<p>(Use option <code>-o HUMAN</code> to force a more human readable output format.)</p>
+ <table>
+  <tr>
+    <th>Element</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>id</td>
+    <td>string</td>
+    <td>Unique identifier of the habit.</td>
+  </tr>
+  <tr>
+    <td>name</td>
+    <td>string</td>
+    <td>Name of the habit.</td>
+  </tr>
+  <tr>
+    <td>description</td>
+    <td>string</td>
+    <td>Description of the habit.</td>
+  </tr>
+  <tr>
+    <td>periodicity</td>
+    <td>string</td>
+    <td>Periodicity of the habit.</td>
+  </tr>
+  <tr>
+    <td>created</td>
+    <td>string</td>
+    <td>Creation timestamp of the habit.</td>
+  </tr>
+  <tr>
+    <td>checkoffs</td>
+    <td>array</td>
+    <td>List of all check offs.</td>
+  </tr>
+</table>
+
+
+<h5 id="example">Example</h5>
+<p>Command</p>
+<pre><code class="lang-sh">(env) $ python habit_tracker<span class="hljs-selector-class">.py</span> create -n <span class="hljs-string">"name"</span> -d <span class="hljs-string">"desc"</span> -<span class="hljs-selector-tag">p</span> DAILY
+</code></pre>
+<p>Output</p>
+<pre><code class="lang-sh">{
+<span class="hljs-attr">"id"</span>: <span class="hljs-string">"54befadbfe874f5c9d5cad6b1d67c4a3"</span>,
+<span class="hljs-attr">"name"</span>: <span class="hljs-string">"name"</span>,
+<span class="hljs-attr">"description"</span>: <span class="hljs-string">"description"</span>,
+<span class="hljs-attr">"periodicity"</span>: <span class="hljs-string">"DAILY"</span>,
+<span class="hljs-attr">"created"</span>: <span class="hljs-string">"2021-01-01 01:01:01.418133"</span>,
+<span class="hljs-attr">"checkoffs"</span>: []
+}
+</code></pre>
+<h4 id="checkoff">checkoff</h4>
+<hr>
+<h5 id="description">Description</h5>
+<p>Checks off given habit with given timestamp and returns checked off habit.</p>
+<h5 id="options">Options</h5>
+ <table>
+  <tr>
+    <th>Option</th>
+    <th>Description</th>
+    <th>Required</th>
+  </tr>
+  <tr>
+    <td>-h, --habit-id TEXT</td>
+    <td>Id of habit that has to be checked off.</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>-t, --timestamp TEXT</td>
+    <td>Check off timestamp, format YYYY-MM-DD HH:MM:SS.f.</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>-o, --output [JSON|HUMAN]</td>
+    <td>Output format. Default JSON.</td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>--help</td>
+    <td>Show this message and exit.</td>
+    <td>No</td>
+  </tr>
+</table>
+
+<h5 id="output">Output</h5>
+<p>JSON Document, per default. </p>
+<p>(Use option <code>-o HUMAN</code> to force a more human readable output format.)</p>
+ <table>
+  <tr>
+    <th>Element</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>id</td>
+    <td>string</td>
+    <td>Unique identifier of the habit.</td>
+  </tr>
+  <tr>
+    <td>name</td>
+    <td>string</td>
+    <td>Name of the habit.</td>
+  </tr>
+  <tr>
+    <td>description</td>
+    <td>string</td>
+    <td>Description of the habit.</td>
+  </tr>
+  <tr>
+    <td>periodicity</td>
+    <td>string</td>
+    <td>Periodicity of the habit.</td>
+  </tr>
+  <tr>
+    <td>created</td>
+    <td>string</td>
+    <td>Creation timestamp of the habit.</td>
+  </tr>
+  <tr>
+    <td>checkoffs</td>
+    <td>array</td>
+    <td>List of all check offs.</td>
+  </tr>
+</table>
+
+<h5 id="example">Example</h5>
+<p>Command</p>
+<pre><code class="lang-sh">(env) $ python habit_tracker.py checkoff –h <span class="hljs-number">54</span>befadbfe874f5c9d5cad6b<span class="hljs-number">1d67c4a3</span> –t "<span class="hljs-number">2021-01-02</span> <span class="hljs-number">14</span>:<span class="hljs-number">00:01.518133</span>"
+</code></pre>
+<p>Output</p>
+<pre><code class="lang-sh">{
+<span class="hljs-attr">"id"</span>: <span class="hljs-string">"54befadbfe874f5c9d5cad6b1d67c4a3"</span>,
+<span class="hljs-attr">"name"</span>: <span class="hljs-string">"name"</span>,
+<span class="hljs-attr">"description"</span>: <span class="hljs-string">"description"</span>,
+<span class="hljs-attr">"periodicity"</span>: <span class="hljs-string">"DAILY"</span>,
+<span class="hljs-attr">"created"</span>: <span class="hljs-string">"2020-12-31 01:01:01.418133"</span>,
+<span class="hljs-attr">"checkoffs"</span>: [
+    <span class="hljs-string">"2021-01-02 14:00:01.518133"</span>
+    ]
+}
+</code></pre>
+<h4 id="delete">delete</h4>
+<hr>
+<h5 id="description">Description</h5>
+<p>Deletes given habit and returns id of deleted habit.</p>
+<h5 id="options">Options</h5>
+ <table>
+  <tr>
+    <th>Option</th>
+    <th>Description</th>
+    <th>Required</th>
+  </tr>
+  <tr>
+    <td>-h, --habit-id TEXT</td>
+    <td>Id of habit that has to be deleted.</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>-o, --output [JSON|HUMAN]</td>
+    <td>Output format. Default JSON.</td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>--help</td>
+    <td>Show this message and exit.</td>
+    <td>No</td>
+  </tr>
+</table>
+
+<h5 id="output">Output</h5>
+<p>JSON Document, per default. </p>
+<p>(Use option <code>-o HUMAN</code> to force a more human readable output format.)</p>
+ <table>
+  <tr>
+    <th>Element</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>id</td>
+    <td>string</td>
+    <td>Unique identifier of the habit.</td>
+  </tr>
+</table>
+
+<h5 id="example">Example</h5>
+<p>Command</p>
+<pre><code class="lang-sh">(<span class="hljs-keyword">env</span>) $ <span class="hljs-keyword">python</span> habit_tracker.py <span class="hljs-keyword">delete</span> –h <span class="hljs-number">54</span>befadbfe874f5c9d5cad6b1d67c4a3
+</code></pre>
+<p>Output</p>
+<pre><code class="lang-sh">{
+<span class="hljs-attr">"id"</span>: <span class="hljs-string">"54befadbfe874f5c9d5cad6b1d67c4a3"</span>
+}
+</code></pre>
+<h3 id="analytics-of-habits">Analytics of Habits</h3>
+<h4 id="list-habits">list-habits</h4>
+<hr>
+<h5 id="description">Description</h5>
+<p>Returns a list of all currently tracked habits.</p>
+<p>The habits are returned sorted by creation date, with the most recently created habit appearing first.</p>
+<h5 id="options">Options</h5>
+ <table>
+  <tr>
+    <th>Option</th>
+    <th>Description</th>
+    <th>Required</th>
+  </tr>
+  <tr>
+    <td>-l, --limit INTEGER</td>
+    <td>A limit on the number of objects to be returned, must be positive. Default is no limit.
+    </td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>-o, --output [JSON|HUMAN]</td>
+    <td>Output format. Default JSON.</td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>--help</td>
+    <td>Show this message and exit.</td>
+    <td>No</td>
+  </tr>
+</table>
+
+<h5 id="output">Output</h5>
+<p>JSON Document, per default. </p>
+<p>(Use option <code>-o HUMAN</code> to force a more human readable output format.)</p>
+<p>List (array) of habit objects, each of the following element:
+ <table>
+  <tr>
+    <th>Element</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>id</td>
+    <td>string</td>
+    <td>Unique identifier of the habit.</td>
+  </tr>
+  <tr>
+    <td>name</td>
+    <td>string</td>
+    <td>Name of the habit.</td>
+  </tr>
+  <tr>
+    <td>description</td>
+    <td>string</td>
+    <td>Description of the habit.</td>
+  </tr>
+  <tr>
+    <td>periodicity</td>
+    <td>string</td>
+    <td>Periodicity of the habit.</td>
+  </tr>
+  <tr>
+    <td>created</td>
+    <td>string</td>
+    <td>Creation timestamp of the habit.</td>
+  </tr>
+  <tr>
+    <td>checkoffs</td>
+    <td>array</td>
+    <td>List of all check offs.</td>
+  </tr>
+</table></p>
+<h5 id="example">Example</h5>
+<p>Command</p>
+<pre><code class="lang-sh">(<span class="hljs-string">env)</span> $ <span class="hljs-string">python </span><span class="hljs-string">habit_tracker.</span><span class="hljs-string">py </span><span class="hljs-built_in">list-habits</span> –l 3
+</code></pre>
+<p>Output</p>
+<pre><code class="lang-sh">[
+    {
+    <span class="hljs-attr">"id"</span>: <span class="hljs-string">"54befadbfe874f5c9d5cad6b1d67c4a3"</span>,
+    <span class="hljs-attr">"name"</span>: <span class="hljs-string">"name"</span>,
+    <span class="hljs-attr">"description"</span>: <span class="hljs-string">"description"</span>,
+    <span class="hljs-attr">"periodicity"</span>: <span class="hljs-string">"DAILY"</span>,
+    <span class="hljs-attr">"created"</span>: <span class="hljs-string">"2020-12-31 01:01:01.418133"</span>,
+    <span class="hljs-attr">"checkoffs"</span>: [
+        <span class="hljs-string">"2021-01-02 14:00:01.518133"</span>
+        ]
+    },...
+]
+</code></pre>
+<h4 id="list-habits-by-periodicity">list-habits-by-periodicity</h4>
+<hr>
+<h5 id="description">Description</h5>
+<p>Returns a list of all currently tracked habits filtered according to given periodicity.</p>
+<p>The habits are returned sorted by creation date, with the most recently created habit appearing first.</p>
+<h5 id="options">Options</h5>
+ <table>
+  <tr>
+    <th>Option</th>
+    <th>Description</th>
+    <th>Required</th>
+  </tr>
+  <tr>
+    <td>-p, --periodicity [DAILY|WEEKLY]</td>
+    <td>Periodicity of habit. Default is &#39;DAILY&#39;.
+    </td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>-o, --output [JSON|HUMAN]</td>
+    <td>Output format. Default JSON.</td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>-l, --limit INTEGER</td>
+    <td>A limit on the number of objects to be returned, must be positive. Default is no limit.
+    </td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>--help</td>
+    <td>Show this message and exit.</td>
+    <td>No</td>
+  </tr>
+</table>
+
+<h5 id="output">Output</h5>
+<p>JSON Document, per default. </p>
+<p>(Use option <code>-o HUMAN</code> to force a more human readable output format.)</p>
+<p>List (array) of habit objects, each of the following element:
+ <table>
+  <tr>
+    <th>Element</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>id</td>
+    <td>string</td>
+    <td>Unique identifier of the habit.</td>
+  </tr>
+  <tr>
+    <td>name</td>
+    <td>string</td>
+    <td>Name of the habit.</td>
+  </tr>
+  <tr>
+    <td>description</td>
+    <td>string</td>
+    <td>Description of the habit.</td>
+  </tr>
+  <tr>
+    <td>periodicity</td>
+    <td>string</td>
+    <td>Periodicity of the habit.</td>
+  </tr>
+  <tr>
+    <td>created</td>
+    <td>string</td>
+    <td>Creation timestamp of the habit.</td>
+  </tr>
+  <tr>
+    <td>checkoffs</td>
+    <td>array</td>
+    <td>List of all check offs.</td>
+  </tr>
+</table></p>
+<h5 id="example">Example</h5>
+<p>Command</p>
+<pre><code class="lang-sh">(<span class="hljs-string">env)</span> $ <span class="hljs-string">python </span><span class="hljs-string">habit_tracker.</span><span class="hljs-string">py </span><span class="hljs-built_in">list-habits-by-periodicity</span> –p <span class="hljs-string">DAILY </span>–l 3
+</code></pre>
+<p>Output</p>
+<pre><code class="lang-sh">[
+    {
+    <span class="hljs-attr">"id"</span>: <span class="hljs-string">"54befadbfe874f5c9d5cad6b1d67c4a3"</span>,
+    <span class="hljs-attr">"name"</span>: <span class="hljs-string">"name"</span>,
+    <span class="hljs-attr">"description"</span>: <span class="hljs-string">"description"</span>,
+    <span class="hljs-attr">"periodicity"</span>: <span class="hljs-string">"DAILY"</span>,
+    <span class="hljs-attr">"created"</span>: <span class="hljs-string">"2020-12-31 01:01:01.418133"</span>,
+    <span class="hljs-attr">"checkoffs"</span>: [
+        <span class="hljs-string">"2021-01-02 14:00:01.518133"</span>
+        ]
+    },...
+]
+</code></pre>
+<h4 id="get-longest-streak">get-longest-streak</h4>
+<hr>
+<h5 id="description">Description</h5>
+<p>Return the longest streak of all currently tracked habits.</p>
+<h5 id="options">Options</h5>
+ <table>
+  <tr>
+    <th>Option</th>
+    <th>Description</th>
+    <th>Required</th>
+  </tr>
+  <tr>
+    <td>-o, --output [JSON|HUMAN]</td>
+    <td>Output format. Default JSON.</td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>--help</td>
+    <td>Show this message and exit.</td>
+    <td>No</td>
+  </tr>
+</table>
+
+<h5 id="output">Output</h5>
+<p>JSON Document, per default. </p>
+<p>(Use option <code>-o HUMAN</code> to force a more human readable output format.)</p>
+ <table>
+  <tr>
+    <th>Element</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>longest_streak</td>
+    <td>integer</td>
+    <td>Longest streak value.</td>
+  </tr>
+</table>
+
+<h5 id="example">Example</h5>
+<p>Command</p>
+<pre><code class="lang-sh">(env) $ <span class="hljs-keyword">python</span> habit_tracker.<span class="hljs-keyword">py</span> <span class="hljs-built_in">get</span>-longest-streak
+</code></pre>
+<p>Output</p>
+<pre><code class="lang-sh">{
+    <span class="hljs-attr">"longest_streak"</span>: <span class="hljs-number">11</span>
+}
+</code></pre>
+<h4 id="get-longest-streak-for-habit">get-longest-streak-for-habit</h4>
+<hr>
+<h5 id="description">Description</h5>
+<p>Returns the longest streak for the given habit.</p>
+<h5 id="options">Options</h5>
+ <table>
+  <tr>
+    <th>Option</th>
+    <th>Description</th>
+    <th>Required</th>
+  </tr>
+  <tr>
+    <td>-h, --habit-id TEXT</td>
+    <td>Id of habit that has to be analyzed for longest streak.</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>-o, --output [JSON|HUMAN]</td>
+    <td>Output format. Default JSON.</td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>--help</td>
+    <td>Show this message and exit.</td>
+    <td>No</td>
+  </tr>
+</table>
+
+<h5 id="output">Output</h5>
+<p>JSON Document, per default. </p>
+<p>(Use option <code>-o HUMAN</code> to force a more human readable output format.)</p>
+ <table>
+  <tr>
+    <th>Element</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>id</td>
+    <td>string</td>
+    <td>Unique identifier of the habit.</td>
+  </tr>
+  <tr>
+    <td>name</td>
+    <td>string</td>
+    <td>Name of the habit.</td>
+  </tr>
+  <tr>
+    <td>longest_streak</td>
+    <td>integer</td>
+    <td>Longest streak value.</td>
+  </tr>
+</table>
+
+<h5 id="example">Example</h5>
+<p>Command</p>
+<pre><code class="lang-sh">(<span class="hljs-string">env)</span> $ <span class="hljs-string">python </span><span class="hljs-string">habit_tracker.</span><span class="hljs-string">py </span><span class="hljs-built_in">get-longest-streak-for-habit</span> -h <span class="hljs-string">54befadbfe874f5c9d5cad6b1d67c4a3</span>
+</code></pre>
+<p>Output</p>
+<pre><code class="lang-sh">{
+    <span class="hljs-attr">"id"</span>: <span class="hljs-string">"54befadbfe874f5c9d5cad6b1d67c4a3"</span>,
+    <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Meditating"</span>,
+    <span class="hljs-attr">"longest_streak"</span>: <span class="hljs-number">11</span>
+}
+</code></pre>
+<h2 id="behind-the-scenes">Behind the scenes</h2>
+<h3 id="components">Components</h3>
+<p>HaTraBa consists of the following components:</p>
+<p><img src="docs/Diagram-hatraba-Component-Diagram.png" alt="Component Diagram"></p>
+<h3 id="process-create-habit">Process Create Habit</h3>
+<p>The interaction between the components is as follows:</p>
+<p><img src="docs/Diagram-hatraba-SD-Create-Habit.png" alt="Sequence Diagram Create Habit"></p>
+<h3 id="process-checkoff-habit">Process Checkoff Habit</h3>
+<p>The interaction between the components is as follows:</p>
+<p><img src="docs/Diagram-hatraba-SD-Checkoff-Habit.png" alt="Sequence Diagram Checkoff Habit"></p>
+<h3 id="process-delete-habit">Process Delete Habit</h3>
+<p>The interaction between the components is as follows:</p>
+<p><img src="docs/Diagram-hatraba-SD-Delete-Habit.png" alt="Sequence Diagram Delete Habit"></p>
+<h3 id="process-list-habits">Process List Habits</h3>
+<p>The interaction between the components is as follows:</p>
+<p><img src="docs/Diagram-hatraba-SD-List-Habits.png" alt="Sequence Diagram List Habits"></p>
+<h3 id="process-list-habits-by-periodicity">Process List Habits by periodicity</h3>
+<p>The interaction between the components is as follows:</p>
+<p><img src="docs/Diagram-hatraba-SD-List-Habits-by-periodicity.png" alt="Sequence Diagram List Habits by periodicity"></p>
+<h3 id="process-get-longest-streak">Process Get longest Streak</h3>
+<p>The interaction between the components is as follows:</p>
+<p><img src="docs/Diagram-hatraba-SD-Get-longest-Streak.png" alt="Sequence Diagram Get longest Streak"></p>
+<h3 id="process-get-longest-streak-for-habit">Process Get longest Streak for Habit</h3>
+<p>The interaction between the components is as follows:</p>
+<p><img src="docs/Diagram-hatraba-SD-Get-longest-Streak-for-Habit.png" alt="Sequence Diagram Get longest Streak for Habit"></p>
+<h2 id="license">License</h2>
+<p><a href="LICENSE">MIT</a> © Anja Kuchenbecker</p>
